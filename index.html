@@ -169,22 +169,30 @@
         //     [[Prototype]]: Error
 
         
-        await axios({
-          method: "post",
-          url: "https://wnsdud4206.github.io/jsontest/data.json",
-          // url: "http://localhost:3000/contents",
-          // headers: {
-          //   "Access-Control-Allow-Origin": "*",
-          //   "Content-Type": "application/Json"
-          // },
-          data: JSON.stringify({
+        // await axios({
+        //   method: "post",
+        //   url: "https://wnsdud4206.github.io/jsontest/data.json",
+        //   // url: "http://localhost:3000/contents",
+        //   // headers: {
+        //   //   "Access-Control-Allow-Origin": "*",
+        //   //   "Content-Type": "application/Json"
+        //   // },
+        //   data: JSON.stringify({
+        //     title: title,
+        //     desc: `${desc} is ...`
+        //   }),
+        //   headers: {
+        //     // "Access-Control-Allow-Origin": "https://wnsdud4206.github.io/jsontest/",
+        //     'Content-Type': 'application/json',
+        //   }
+        let data = {
             title: title,
             desc: `${desc} is ...`
-          }),
+        };
+        axios.post("https://wnsdud4206.github.io/jsontest/data.json",  JSON.stringify(data), {
           headers: {
-            // "Access-Control-Allow-Origin": "https://wnsdud4206.github.io/jsontest/",
-            'Content-Type': 'application/json',
-          }
+            "Content-Type": `application/json`,
+          },
         }).then(res => {
           console.log(res);
         }).catch(e => {

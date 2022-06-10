@@ -177,13 +177,13 @@
           //   "Access-Control-Allow-Origin": "*",
           //   "Content-Type": "application/Json"
           // },
-          headers: {
-            "Access-Control-Allow-Origin": "https://wnsdud4206.github.io/jsontest/",
-            'Content-Type': 'application/json',
-          },
-          data: {
+          data: JSON.stringify({
             title: title,
             desc: `${desc} is ...`
+          }),
+          headers: {
+            // "Access-Control-Allow-Origin": "https://wnsdud4206.github.io/jsontest/",
+            'Content-Type': 'application/json',
           }
         }).then(res => {
           console.log(res);

@@ -1,0 +1,20 @@
+{
+  "name": "jsontest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wnsdud4206/jsontest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wnsdud4206/jsontest/issues"
+  },
+  "homepage": "https://github.com/wnsdud4206/jsontest#readme",
+  "proxy": "https://wnsdud4206.github.io/jsontest/data.json"
+}

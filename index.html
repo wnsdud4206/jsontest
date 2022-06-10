@@ -173,14 +173,21 @@
           method: "post",
           url: "https://wnsdud4206.github.io/jsontest/data.json",
           // url: "http://localhost:3000/contents",
+          // headers: {
+          //   "Access-Control-Allow-Origin": "*",
+          //   "Content-Type": "application/Json"
+          // },
           headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/Json"
+            'Content-Type': 'text/plain;charset=utf-8',
           },
           data: {
             title: title,
             desc: `${desc} is ...`
           }
+        }).then(res => {
+          console.log(res);
+        }).catch(e => {
+          console.log(e);
         });
       };
 

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+      #postBox {
+        display: flax;
+        flex-direction: column;
+      }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+
+    <!-- <div id="test"></div>
+    <script>
+      // 함수에 컴포넌트를 넣고 데이터가 변경되었을 때 새로고침없이 출력되는 값도 변경이 되는가? 안될 것 같은데 데이터가 변경되었을 때 함수를 재호출해주면 출력되는 값이 바뀌지 않을까?
+      console.log("start");
+    
+      var bool = false;
+      function testFunc(bool) {
+        var text = bool ? "hello" : "bacon";
+        console.log(text);
+
+        document.querySelector("#test").innerHTML = `
+          ${text}
+          <button onclick="
+            console.log(bool);
+            bool = !bool;
+            console.log(bool);
+            testFunc(bool);
+          ">press</button>
+        `;
+      }
+      testFunc(bool);
+    </script> -->
+
+
+
+
+    <div id="post"></div>
+    <div id="postBox"></div>
+    <script>
+      console.log("start");
+      
+      // GET
+      // async function getData() {
+      //   // const response = await axios.get("../data.json");
+      //   // const data = Promise.resolve(response.data.state[0])
+      //   const response = await axios.get("http://localhost:3000/state");
+      //   const data = Promise.resolve(response.data[0])
+      //   console.log(data);
+
+      //   return data;
+      // }
+
+      // POST
+      // async function postData() {
+      //   try {
+      //     // const response = await axios.post("../data.json");
+      //     const response = await axios({
+      //       url: "http://localhost:3000/state",
+      //       method: "post",
+      //       data: {
+      //         "test": "test"
+      //       }
+      //     });
+      //     const data = Promise.resolve(response.data)
+      //     console.log(data);
+
+      //     return data;
+      //   } catch (e) {
+      //     return new Error(e);
+      //   }
+      // }
+      // async function postData() {
+      //   await axios({
+      //     url: "http://localhost:3000/state",
+      //     method: "post",
+      //     data: {
+      //       "test": "test"
+      //     }
+      //   });
+      // }
+
+      // 하나만 생겼다!! - https://velog.io/@bey1548/axios-await-async
+      // 내생각엔 무한호출은 아직 모르겠지만 json-server의 버그인 것 같다. 한 번 호출하고 data.json을 가내수공업으로 원상복구하고 새로고침해서 다시 한 번 호출하면 두개가 추가된다. 아마도 내가 data.json 데이터를 일일이 지웠다는 것을 인식하지 못하고 서버에는 추가되었던 데이터가 그대로 남아 같이 추가되는 것이 아닌 지워진 것 자체가 서버가 인식을 못해서 안된 것 같다.
+      // 이제 json-server로는 가능해 졌지만 로컬 json이나 gist로 올린 json은 CORS? 때문에 보안상으로 접근이 차단된 것 같다. 이를 해결해야한다.
+      // 아래 것을 다시 async&await으로 바꿔주기
+      // const axios_post = () => {
+      //   const data = {
+      //     name: 'name',
+      //     age: 23
+      //   };
+        
+      //   axios.post("http://localhost:3000/state", data)
+      //     .then((response) => {
+      //         console.log(response)
+      //     }).catch((error) => {
+      //       console.log(error);
+      //     })
+      // }
+      // const axios_post = async () => {
+      //   try {
+      //     var response = await axios.post("http://localhost:3000/state", {
+      //       name: 'name',
+      //       age: 23
+      //     });
+
+      //     console.log(response);
+
+      //     return response.data;
+      //   } catch (e) {
+      //     return new Error(e);
+      //   }
+      // }
+      const axios_get = async () => {
+        try {
+          // var response = await axios.get("http://localhost:3000/contents");
+          // var response = await axios.get("https://gist.githubusercontent.com/wnsdud4206/5d34a8bd5bcb9bc7666cb75f47678b84/raw/65a4ac60f28f8a8bcfdae2c99245a7bf1ee32df0/data.json");
+          var response = await axios({
+            method: "get",
+            url: "https://wnsdud4206.github.io/jsontest/data.json"
+          });
+          console.log(response.data.contents);
+          return response.data.contents;
+        } catch (e) {
+          return new Error(e);
+        }
+      };
+      const axios_post = async (title, desc) => {
+        // await axios.post("http://localhost:3000/contents", {
+        // await axios.post("https://gist.githubusercontent.com/wnsdud4206/5d34a8bd5bcb9bc7666cb75f47678b84/raw/65a4ac60f28f8a8bcfdae2c99245a7bf1ee32df0/data.json", {
+        // gist로 했는데 왜 안될까? - https://coding-groot.tistory.com/91 - CORS 표준을 지켜서 내 사이트로부터의 응답에 다른 Origin이더라도 허용해달라고 요청?? - https://www.youtube.com/watch?v=6QV_JpabO7g
+        // Access-Control-Allow-Origin 을 허용하게 해야되는데 어떻게? - axios.post() 안에 Access-Control-Allow-Origin 프로퍼티로 줘야하나?
+        // axios.create() 가 json 생성하는 건가? 이걸로 허용하는건가?
+        // 나랑 같은 문제 - https://www.inflearn.com/questions/223197
+        // 참고 - https://okky.kr/article/498449
+        // 첨고 - https://xiubindev.tistory.com/115
+        // 참고 - https://studyingpingu.tistory.com/39
+        // ** 그냥 Heroku를 이용해서 호스팅이랑 서버를 모두 해결?, http-proxy-middleware 라이브러리 사용?, (+ 여러가지 해결법) - https://xiubindev.tistory.com/115, heroku로 JSON 배포 - https://velog.io/@pumpkin/json-server-heroku-%EB%B0%B0%ED%8F%AC
+        // axios 말고 express 사용? 혹은 axios랑 같이 사용?
+        // 프론트엔드 CORS - https://velog.io/@vraimentres/CORS, https://devport.tistory.com/13
+        // 3-1에있는 속성들을 json에 추가시켰더니 아래 error 출력1은 나오지 않음 - https://velog.io/@kansun12/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-CORS
+        // 그럼 react에서는 gist로 json을 호스팅하고 axios로 CRUD하면 되나?
+        // baseURL - https://react.vlpt.us/redux-middleware/09-cors-and-proxy.html
+        // RestAPI? 를 알아야 CRUD를 알 수 있나?? 유튜브라 구글링으로 알아보기
+        // json-server를 github로 호스팅해서 사용? - https://velog.io/@milkyway/My-Json-Server%EB%A1%9C-%EA%B0%84%EB%8B%A8%ED%95%9C-API-%EC%84%9C%EB%B2%84-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0
+        // 그냥 블로그만들기 이런 영상보면서 api 활용하는 방법들을 알아보는 것도 좋을듯
+        // Express RESTFul API 서버 만들기 - https://any-ting.tistory.com/14
+        // express를 axios 로 조작하는 방법?
+
+        // error 출력1
+        // Access to XMLHttpRequest at 'https://gist.githubusercontent.com/wnsdud4206/3c71abbfc962660bc24c0c9d1e24a160/raw/d69a257fc510b809f767dcd5a2c61c5a27f168af/data.json' from origin 'http://127.0.0.1:5500' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+        // error 출력2
+        // isAxiosError.js:12          POST https://gist.githubusercontent.com/wnsdud4206/3c71abbfc962660bc24c0c9d1e24a160/raw/d69a257fc510b809f767dcd5a2c61c5a27f168af/data.json net::ERR_FAILED
+        // error 출력3
+        // Uncaught (in promise) 
+        //   o {message: 'Network Error', name: 'AxiosError', code: 'ERR_NETWORK', config: {…}, request: XMLHttpRequest, …}
+        //     code: "ERR_NETWORK"
+        //     config: {transitional: {…}, transformRequest: Array(1), transformResponse: Array(1), timeout: 0, adapter: ƒ, …}
+        //     message: "Network Error"
+        //     name: "AxiosError"
+        //     request: XMLHttpRequest {data: undefined, onreadystatechange: null, readyState: 4, timeout: 0, withCredentials: false, …}
+        //     response: XMLHttpRequest {data: undefined, onreadystatechange: null, readyState: 4, timeout: 0, withCredentials: false, …}
+        //     [[Prototype]]: Error
+
+        
+        await axios({
+          method: "post",
+          url: "https://wnsdud4206.github.io/jsontest/data.json",
+          // url: "http://localhost:3000/contents",
+          headers: {
+            "Access-Control-Allow-Origin": "*"
+          },
+          data: {
+            title: title,
+            desc: `${desc} is ...`
+          }
+        });
+      };
+
+
+      async function postEvent() {
+        try {
+          document.querySelector("#post").innerHTML = `
+            <p>loading...</p>
+          `;
+          var data = await axios_get();
+          var lastData = data.find(dt => dt.id === data.length);
+          // console.log(data.find(dt => dt.id === data.length));
+          document.querySelector("#post").innerHTML = `
+            <p>title: ${lastData.title}</p>
+            <p>desc: ${lastData.desc}</p>
+          `;
+        } catch (e) {
+          document.querySelector("#post").innerHTML = `
+            <p>error</p>
+          `;
+        }
+      }
+      postEvent();
+      function postButton() {
+        document.querySelector("#postBox").innerHTML = `
+          <form onsubmit="
+            event.preventDefault();
+            axios_post(this.title.value, this.desc.value);
+            postEvent();
+          ">
+            <p>
+              <input type="text" name="title" id="title" placeholder="title..." />
+            </p>
+            <p>
+              <textarea name="desc" id="desc" placeholder="desc..."></textarea>
+            </p>
+            <p>
+              <input type="submit" value="press" />
+            </p>
+          </form>
+        `;
+      }
+      postButton();
+      // 여태 착각하고 있던 것은 post를 보내면 다시 post로 데이터를 받아오는 줄 알았다. 그래서 post요청의 함수를 넣으면 무한 새로고침이 되었던 것 같다.
+    </script>
+  </body>
+</html>
